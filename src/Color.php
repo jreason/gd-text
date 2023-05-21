@@ -94,7 +94,7 @@ class Color
      * @return int Returns the index of the specified color+alpha in the palette of the image,
      *             or index of allocated color if the color does not exist in the image's palette.
      */
-    public function getIndex(\GdImage $image) : int
+    public function getIndex($image) : int
     {
 
         $index = $this->hasAlphaChannel()
