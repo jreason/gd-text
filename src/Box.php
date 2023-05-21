@@ -6,7 +6,7 @@ use GDText\Struct\Rectangle;
 
 class Box
 {
-    protected \GdImage $im;
+    protected $im;
 
     protected int $strokeSize = 0;
     protected Color $strokeColor;
