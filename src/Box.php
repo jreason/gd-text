@@ -233,10 +233,15 @@ class Box
             throw new \InvalidArgumentException('No path to font file has been specified.');
         }
 
-        $lines = match ( $this->textWrapping ) {
-            TextWrapping::NoWrap => array( $text ),
-            default => $this->wrapTextWithOverflow($text),
-        };
+        switch ($this->textWrapping) {
+            case TextWrapping::NoWrap:
+                $lines = array($text);
+                break;
+            case TextWrapping::WrapWithOverflow:
+            default:
+                $lines = $this->wrapTextWithOverflow($text);
+                break;
+        }
 
         if ($this->debug) {
             // Marks whole textbox area with color
@@ -249,11 +254,17 @@ class Box
         $lineHeightPx = $this->lineHeight * $this->fontSize;
         $textHeight = count($lines) * $lineHeightPx;
 
-        $yAlign = match ( $this->alignY ) {
-            VerticalAlignment::Center => ( $this->box->getHeight() / 2 ) - ( $textHeight / 2 ),
-            VerticalAlignment::Bottom => $this->box->getHeight() - $textHeight,
-            default => 0,
-        };
+        switch ($this->alignY) {
+            case VerticalAlignment::Center:
+                $yAlign = ($this->box->getHeight() / 2) - ($textHeight / 2);
+                break;
+            case VerticalAlignment::Bottom:
+                $yAlign = $this->box->getHeight() - $textHeight;
+                break;
+            case VerticalAlignment::Top:
+            default:
+                $yAlign = 0;
+        }
 
         $n = 0;
 
@@ -263,11 +274,17 @@ class Box
         foreach ($lines as $line) {
             $box = $this->calculateBox($line);
 
-            $xAlign = match ( $this->alignX ) {
-                HorizontalAlignment::Center => ( $this->box->getWidth() - $box->getWidth() ) / 2,
-                HorizontalAlignment::Right => ( $this->box->getWidth() - $box->getWidth() ),
-                default => 0,
-            };
+            switch ($this->alignX) {
+                case HorizontalAlignment::Center:
+                    $xAlign = ($this->box->getWidth() - $box->getWidth()) / 2;
+                    break;
+                case HorizontalAlignment::Right:
+                    $xAlign = ($this->box->getWidth() - $box->getWidth());
+                    break;
+                case HorizontalAlignment::Left:
+                default:
+                    $xAlign = 0;
+            }
 
             $yShift = $lineHeightPx * (1 - $this->baseline);
 
