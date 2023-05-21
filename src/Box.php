@@ -25,7 +25,7 @@ class Box
     protected ?Color $backgroundColor = null;
     protected Struct\Rectangle $box;
 
-    public function __construct(\GDImage $image)
+    public function __construct($image)
     {
         $this->im = $image;
         $this->fontColor = new Color(0, 0, 0);
